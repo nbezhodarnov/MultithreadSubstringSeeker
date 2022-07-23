@@ -1,0 +1,8 @@
+7
+1 1 dad
+1 6 dad
+1 11 dad
+2 1 dad
+2 5 dad
+2 9 dad
+2 13 ded
