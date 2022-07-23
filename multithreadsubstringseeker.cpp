@@ -15,13 +15,28 @@ std::vector<SearchResult> MultithreadSubstringSeeker::seek(const std::string &in
         throw std::runtime_error("MultithreadSubstringSeeker: Error while opening file!");
     }
     
+    std::list<std::future<std::vector<SearchResult>>> resultsList;
     std::vector<SearchResult> result = {};
     std::string line = "";
     int i = START;
+    ThreadPool pool;
     while (std::getline(file, line)) {
-        std::vector<SearchResult> resultInLine = seekInLine(line, mask, i, anyChar);
-        result.insert(result.end(), resultInLine.begin(), resultInLine.end());
+        resultsList.push_back(pool.addTask(std::bind(&MultithreadSubstringSeeker::seekInLine, this, line, mask, i, anyChar)));
         i++;
+        
+        if ((i - 1) % 100 == 0) {
+            while(!resultsList.empty()) {
+                std::vector<SearchResult> resultInLine = resultsList.front().get();
+                result.insert(result.end(), resultInLine.begin(), resultInLine.end());
+                resultsList.erase(resultsList.begin());
+            }
+        }
+    }
+    
+    while(!resultsList.empty()) {
+        std::vector<SearchResult> resultInLine = resultsList.front().get();
+        result.insert(result.end(), resultInLine.begin(), resultInLine.end());
+        resultsList.erase(resultsList.begin());
     }
     
     return result;

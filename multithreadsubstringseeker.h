@@ -5,9 +5,10 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <list>
 #include <map>
 
-#include "tasksqueue.h"
+#include "threadpool.h"
 
 struct SearchResult {
     int lineIndex;
