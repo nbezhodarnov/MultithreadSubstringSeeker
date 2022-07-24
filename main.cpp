@@ -1,6 +1,7 @@
 #include <iostream>
 
-#include "multithreadsubstringseeker.h"
+#include "multithreadsubstringseekerinfile.h"
+#include "boyermooresubstringseeker.h"
 
 int main(int argc, char** argv) {
     if (argc < 3 || argc > 4) {
@@ -12,12 +13,12 @@ int main(int argc, char** argv) {
         anyChar = argv[3][0];
     }
 
-    MultithreadSubstringSeeker seeker;
-    std::vector<SearchResult> result = seeker.seek(argv[1], argv[2], anyChar);
+    std::unique_ptr<SubstringSeekerInAbstractObject> seekerInObject(new MultithreadSubstringSeekerInFile(std::unique_ptr<AbstractSubstringSeeker>(new BoyerMooreSubstringSeeker())));
+    std::vector<FoundSubstringInObjectInfo> result = seekerInObject->seek(argv[1], argv[2], anyChar);
     
     std::cout << result.size() << std::endl;
-    for (auto searchResultItem : result) {
-        std::cout << searchResultItem.lineIndex << " " << searchResultItem.startCharIndex << " " << searchResultItem.substring << std::endl;
+    for (const auto &searchResultItem : result) {
+        std::cout << searchResultItem.lineIndex << " " << searchResultItem.info.startCharIndex << " " << searchResultItem.info.substring << std::endl;
     }
 
     return 0;

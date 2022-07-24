@@ -7,7 +7,8 @@
 #include <string>
 #include <vector>
 
-#include "multithreadsubstringseeker.h"
+#include "multithreadsubstringseekerinfile.h"
+#include "boyermooresubstringseeker.h"
 
 class SubstringSeekerTetser
 {
@@ -17,7 +18,7 @@ public:
     void launchTest(const std::string &testFolder, const std::string &mask, const char &anyChar) const;
 
 private:
-    std::vector<SearchResult> parseAnswer(const std::string &answerFileName) const;
+    std::vector<FoundSubstringInObjectInfo> parseAnswer(const std::string &answerFileName) const;
 };
 
 #endif // SUBSTRINGSEEKERTETSER_H

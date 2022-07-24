@@ -2,19 +2,19 @@
 
 #include <iostream>
 
-void printResult(const std::vector<SearchResult> &result) {
+void printResult(const std::vector<FoundSubstringInObjectInfo> &result) {
     std::cout << result.size() << std::endl;
-    for (auto searchResultItem : result) {
-        std::cout << searchResultItem.lineIndex << " " << searchResultItem.startCharIndex << " " << searchResultItem.substring << std::endl;
+    for (const auto &searchResultItem : result) {
+        std::cout << searchResultItem.lineIndex << " " << searchResultItem.info.startCharIndex << " " << searchResultItem.info.substring << std::endl;
     }
 }
 
 void SubstringSeekerTetser::launchTest(const std::string &testFolder, const std::string &mask, const char &anyChar) const
 {
-    MultithreadSubstringSeeker seeker;
-    std::vector<SearchResult> result = seeker.seek(testFolder + "/input.txt", mask, anyChar);
+    std::unique_ptr<SubstringSeekerInAbstractObject> seekerInObject(new MultithreadSubstringSeekerInFile(std::unique_ptr<AbstractSubstringSeeker>(new BoyerMooreSubstringSeeker())));
+    std::vector<FoundSubstringInObjectInfo> result = seekerInObject->seek(testFolder + "/input.txt", mask, anyChar);
 
-    std::vector<SearchResult> answer = parseAnswer(testFolder + "/answer.txt");
+    std::vector<FoundSubstringInObjectInfo> answer = parseAnswer(testFolder + "/answer.txt");
 
     if (result != answer) {
         printResult(result);
@@ -24,7 +24,7 @@ void SubstringSeekerTetser::launchTest(const std::string &testFolder, const std:
     }
 }
 
-std::vector<SearchResult> SubstringSeekerTetser::parseAnswer(const std::string &answerFileName) const
+std::vector<FoundSubstringInObjectInfo> SubstringSeekerTetser::parseAnswer(const std::string &answerFileName) const
 {
     std::ifstream answerFile(answerFileName);
     if (!answerFile.is_open()) {
@@ -37,13 +37,13 @@ std::vector<SearchResult> SubstringSeekerTetser::parseAnswer(const std::string &
     std::getline(answerFile, line);
     std::istringstream(line) >> foundSubstringsCount;
 
-    std::vector<SearchResult> answer = {};
-    SearchResult result = {-1, -1, ""};
+    std::vector<FoundSubstringInObjectInfo> answer = {};
+    FoundSubstringInObjectInfo result = {-1, -1, ""};
     while (std::getline(answerFile, line)) {
         std::istringstream lineStream(line);
-        lineStream >> result.lineIndex >> result.startCharIndex;
+        lineStream >> result.lineIndex >> result.info.startCharIndex;
         int nextItemIndex = static_cast<int>(lineStream.tellg()) + 1;
-        result.substring = line.substr(nextItemIndex, line.size() - nextItemIndex);
+        result.info.substring = line.substr(nextItemIndex, line.size() - nextItemIndex);
         answer.push_back(result);
     }
 
