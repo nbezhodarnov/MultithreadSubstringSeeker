@@ -3,7 +3,6 @@
 
 #include <functional>
 #include <atomic>
-#include <chrono>
 #include <future>
 #include <thread>
 #include <mutex>

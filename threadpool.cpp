@@ -69,7 +69,7 @@ void ThreadPool::threadFunction()
                 } else {
                     taskRecieved = false;
                 }
-                return canceling || stoping || taskRecieved;  // 4.
+                return canceling || stoping || taskRecieved;
             });
         }
         
