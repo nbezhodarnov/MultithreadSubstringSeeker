@@ -18,6 +18,7 @@ void ThreadPool::terminate()
         return;
     }
     stoping = true;
+    mutex.unlock();
     condition.notify_all();
     for (auto &thread : threads) {
         thread.join();
@@ -33,6 +34,7 @@ void ThreadPool::cancel()
     canceling = true;
     tasksQueue.clear();
     condition.notify_all();
+    mutex.unlock();
     for (auto &thread : threads) {
         thread.join();
     }
