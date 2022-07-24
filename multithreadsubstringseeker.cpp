@@ -23,7 +23,7 @@ std::vector<SearchResult> MultithreadSubstringSeeker::seek(const std::string &in
     while (std::getline(file, line)) {
         resultsList.push_back(pool.addTask(std::bind(&MultithreadSubstringSeeker::seekInLine, this, line, mask, i, anyChar)));
         i++;
-        
+
         if ((i - 1) % 100 == 0) {
             while(!resultsList.empty()) {
                 std::vector<SearchResult> resultInLine = resultsList.front().get();
@@ -32,13 +32,13 @@ std::vector<SearchResult> MultithreadSubstringSeeker::seek(const std::string &in
             }
         }
     }
-    
+
     while(!resultsList.empty()) {
         std::vector<SearchResult> resultInLine = resultsList.front().get();
         result.insert(result.end(), resultInLine.begin(), resultInLine.end());
         resultsList.erase(resultsList.begin());
     }
-    
+
     return result;
 }
 
