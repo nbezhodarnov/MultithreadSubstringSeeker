@@ -9,7 +9,7 @@ endif()
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(SUBSTRING_SEEKERS_LIBRARY_SOURCES multithreadqueue.h threadspool.h threadspool.cpp multithreadsubstringseeker.h multithreadsubstringseeker.cpp)
+set(SUBSTRING_SEEKERS_LIBRARY_SOURCES multithreadqueue.h threadpool.h threadpool.cpp multithreadsubstringseeker.h multithreadsubstringseeker.cpp)
 
 add_library(substringseekers SHARED ${SUBSTRING_SEEKERS_LIBRARY_SOURCES})
 target_include_directories(substringseekers PRIVATE "${PROJECT_SOURCE_DIR}")
