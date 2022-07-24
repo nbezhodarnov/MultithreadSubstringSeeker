@@ -18,6 +18,7 @@ add_executable(mtfind main.cpp)
 target_include_directories(mtfind PRIVATE "${PROJECT_SOURCE_DIR}")
 target_link_libraries(mtfind substringseekers)
 
+enable_testing()
 add_executable(SubstringSeekerTetser tests/substringseekertetser.h tests/substringseekertetser.cpp tests/main.cpp)
 target_include_directories(SubstringSeekerTetser PRIVATE "${PROJECT_SOURCE_DIR}")
 target_link_libraries(SubstringSeekerTetser substringseekers)
